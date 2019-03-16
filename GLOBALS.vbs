@@ -1,0 +1,6 @@
+Public Const CAPABILITIES_NAME As String = "CAPABILITIES"
+Public Const ENGINE_NAME As String = "ENGINE"
+Public Const README_NAME As String = "README"
+Public Const SCHEDULE_NAME As String = "SCHEDULE"
+Public Const USERS_NAME As String = "USERS"
+Public Const UNAVAILABILITY_NAME As String = "UNAVAILABILITY"

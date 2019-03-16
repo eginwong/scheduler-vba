@@ -190,5 +190,3 @@ End Function
 Function CheckPositiveObjective()
     CheckPositiveObjective = Worksheets(ENGINE_NAME).range(OBJECTIVE_CELL).Value > 0
 End Function
-
-

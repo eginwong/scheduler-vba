@@ -103,9 +103,11 @@ Sub RemoveRoleFromEngineSht(roleName)
     End If
 End Sub
 
-Function SolveSchedule()
+Function SolveSchedule(SolutionMethod As String)
     Application.Run "SolverReset"
     
+    'Ideally, we refactor this into separate methods but I want to avoid creating extra Subprocedures to retrieve the ranges for the 
+    'different constraints
     With Worksheets(ENGINE_NAME)
         'CONSTRAINT: align role counts
         Dim actualRoleConstraint As String
@@ -133,30 +135,30 @@ Function SolveSchedule()
               
         Dim solverResult As Variant
 
-        'OpenSolver version
-        'TODO: FIX SUBSCRIPT ERROR
-        If AddIns("OpenSolver").Installed Then
-            OpenSolver.AddConstraint .range(expectedRoleConstraint), RelationEQ, .range(actualRoleConstraint)
-            OpenSolver.AddConstraint .range(workingAreaConstraint), RelationBIN
-            OpenSolver.AddConstraint .range(maxRolePerPersonConstraint), RelationLE, , 1
-            
-            'OBJECTIVE
-            OpenSolver.SetObjectiveFunctionCell .range(OBJECTIVE_CELL)
-            OpenSolver.SetDecisionVariables .range(workingAreaConstraint)
-            OpenSolver.SetObjectiveSense MaximiseObjective
-            OpenSolver.SetChosenSolver "CBC"
-            
-            solverResult = OpenSolver.RunOpenSolver(False, True)
-        Else
-            Application.Run "SolverAdd", expectedRoleConstraint, 2, actualRoleConstraint
-            Application.Run "SolverAdd", workingAreaConstraint, 5
-            Application.Run "SolverAdd", maxRolePerPersonConstraint, 1, 1
-            Application.Run "SolverOk", OBJECTIVE_CELL, 1, "0", workingAreaConstraint, 2
-            
-            solverResult = Application.Run("SolverSolve", True)
-        End If
+        Select Case SolutionMethod
+            Case "OpenSolver"
+                OpenSolver.AddConstraint .range(expectedRoleConstraint), RelationEQ, .range(actualRoleConstraint)
+                OpenSolver.AddConstraint .range(workingAreaConstraint), RelationBIN
+                OpenSolver.AddConstraint .range(maxRolePerPersonConstraint), RelationLE, , 1
+                
+                'OBJECTIVE
+                OpenSolver.SetObjectiveFunctionCell .range(OBJECTIVE_CELL)
+                OpenSolver.SetDecisionVariables .range(workingAreaConstraint)
+                OpenSolver.SetObjectiveSense MaximiseObjective
+                OpenSolver.SetChosenSolver "CBC"
+                
+                solverResult = OpenSolver.RunOpenSolver(False, True)
+                SolveSchedule = ParseOpenSolverReturnCodes(solverResult) And CheckPositiveObjective
         
-        SolveSchedule = ParseSolverReturnCodes(solverResult) And CheckPositiveObjective
+            Case "Solver"
+                Application.Run "SolverAdd", expectedRoleConstraint, 2, actualRoleConstraint
+                Application.Run "SolverAdd", workingAreaConstraint, 5
+                Application.Run "SolverAdd", maxRolePerPersonConstraint, 1, 1
+                Application.Run "SolverOk", OBJECTIVE_CELL, 1, "0", workingAreaConstraint, 2
+                
+                solverResult = Application.Run("SolverSolve", True)
+                SolveSchedule = ParseSolverReturnCodes(solverResult) And CheckPositiveObjective
+        End Select            
     End With
 End Function
 
@@ -183,6 +185,13 @@ Function ParseSolverReturnCodes(code)
         MsgBox ("It is possible that you have hit the limit on the model. To continue using the scheduler, either remove users/roles or follow instructions in the new tab to install OpenSolver.")
         'TODO: trigger new spreadsheet with instructions!
     End Select
+End Function
+
+Function ParseOpenSolverReturnCodes(code)
+    ParseOpenSolverReturnCodes = False
+    If code = 0 Then
+        ParseOpenSolverReturnCodes = True
+    End If
 End Function
 
 'Non-negative objective cell causes Solver to fail

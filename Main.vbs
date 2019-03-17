@@ -48,7 +48,7 @@ Sub GENERATE_SCHEDULE()
     'Need to be in ENGINE worksheet to run Solver
     Worksheets(ENGINE_NAME).Activate
     Dim solverResults As Boolean
-    solverResults = SolveSchedule
+    solverResults = SolveSchedule(CheckSolverProgram)
     
     Call ToggleAvailable
     
@@ -99,3 +99,16 @@ Sub REMOVE_ROLE()
     Application.ScreenUpdating = True
 End Sub
 
+Private Function CheckSolverProgram() As String
+    'VB ghetto way of doing try-catch block
+    On Error Resume Next
+    Err.Clear
+    'Will throw an error if OpenSolver is not loaded as a plugin
+    If AddIns("OpenSolver").Installed Then
+        CheckSolverProgram = "OpenSolver"
+    End If
+    
+    If Err.Number <> 0 Then
+        CheckSolverProgram = "Solver"
+    End If    
+End Function

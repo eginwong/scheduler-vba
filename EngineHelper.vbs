@@ -182,7 +182,7 @@ Function ParseSolverReturnCodes(code)
         ParseSolverReturnCodes = True
     'Case 3 To 13 are False
     Case 13
-        MsgBox ("It is possible that you have hit the limit on the model. To continue using the scheduler, either remove users/roles or follow instructions in the new tab to install OpenSolver.")
+        MsgBox ("It is possible that you have hit the limit on the model. To continue using the scheduler, either remove users/roles or follow instructions in the OPENSOLVER_INSTRUCTION spreadsheet to install OpenSolver.")
         'TODO: trigger new spreadsheet with instructions!
     End Select
 End Function

@@ -44,37 +44,9 @@ Function CheckSolver() As Boolean
     ' initialize Solver
     Application.Run "Solver.xlam!Solver.Solver2.Auto_open"
   End If
-
   On Error GoTo 0
 
 End Function
-
-'https://stackoverflow.com/questions/9879825/how-to-add-a-reference-programmatically
-Sub AddReferences(wbk As Workbook)
-    ' Run DebugPrintExistingRefs in the immediate pane, to show guids of existing references
-    AddRef wbk, "{00025E01-0000-0000-C000-000000000046}", "DAO"
-    AddRef wbk, "{00020905-0000-0000-C000-000000000046}", "Word"
-    AddRef wbk, "{91493440-5A91-11CF-8700-00AA0060263B}", "PowerPoint"
-End Sub
-
-Sub AddRef(wbk As Workbook, sGuid As String, sRefName As String)
-    Dim i As Integer
-    On Error GoTo EH
-    With wbk.VBProject.References
-        For i = 1 To .Count
-            If .Item(i).name = sRefName Then
-               Exit For
-            End If
-        Next i
-        If i > .Count Then
-           .AddFromGuid sGuid, 0, 0 ' 0,0 should pick the latest version installed on the computer
-        End If
-    End With
-EX: Exit Sub
-EH: MsgBox "Error in 'AddRef'" & vbCrLf & vbCrLf & Err.Description
-    Resume EX
-    Resume ' debug code
-End Sub
 
 Function InputWithExit(prompt As String, boxName As String)
     Dim result As String
@@ -91,7 +63,7 @@ End Function
 'Checks if one cell is equal to the other
 'https://stackoverflow.com/questions/28071459/compare-2-cells-in-excel-by-using-vbas
 Function CellEquality(cell1 As range, cell2 As range) As Boolean
-        CellEquality = IIf([cell1] = [cell2], True, False)
+    CellEquality = IIf([cell1] = [cell2], True, False)
 End Function
 
 'Maps date frequencies to vba acceptable format
@@ -113,3 +85,9 @@ Function MapFrequencyToVBAFormat(frequency As String)
     End Select
 End Function
 
+Sub InsertAndCopyColumn(worksheetName, range)
+    With Worksheets(worksheetName)
+        .Columns(range).Insert Shift:=xlToRight, CopyOrigin:=xlFormatFromLeftOrAbove 'insert new column
+        .Columns(range - 1).Copy Destination:=.Columns(range)
+    End With
+End Sub

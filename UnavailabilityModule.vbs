@@ -81,5 +81,3 @@ Private Sub SortRecords()
             order1:=xlAscending, Header:=xlYes
     End With
 End Sub
-
-

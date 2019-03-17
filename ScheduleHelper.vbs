@@ -1,5 +1,6 @@
 Const USER_ROLE_COL = 1
 Const ROLE_ROW = 4
+
 Sub InsertBlankSchedule()
     With Worksheets(SCHEDULE_NAME)
         .Rows(3).Insert Shift:=xlShiftUp, CopyOrigin:=1 'don't know how to insert multiple rows
@@ -68,5 +69,3 @@ Sub PrintSchedule()
         Next i
     End With
 End Sub
-
-

@@ -63,5 +63,3 @@ Sub ToggleAvailability(SwitchOn As Boolean)
         Next user
     End With
 End Sub
-
-

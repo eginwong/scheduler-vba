@@ -5,7 +5,7 @@ Bug: there is a limit of 200 decision variables using Microsoft Excel's Solver a
   - [Premium Solver](https://www.solver.com/premium-solver%C2%AE-platform), a paid for plug-in
   - [OpenSolver](https://opensolver.org/), an open-source solution
 - Quick workaround fix by writing conditional code to use OpenSolver when detected
-- TODO: add more graceful check
+- ~~TODO~~: add more graceful check
 - TODO: include instructions on how to download, install, and configure OpenSolver in a hidden sheet
 
 

@@ -46,7 +46,6 @@ Sub RemoveRoleFromUsersSht(roleName)
 
     With Worksheets(USERS_NAME)
         Set startingCell = .Columns(TITLE_COL).Find("Roles")
-        
         Set offendingRole = .Rows(startingCell.Row).Find(roleName)
         
         If NotEmpty(offendingRole) Then
@@ -54,4 +53,3 @@ Sub RemoveRoleFromUsersSht(roleName)
         End If
     End With
 End Sub
-

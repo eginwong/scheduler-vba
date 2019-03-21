@@ -32,7 +32,7 @@ Sub REMOVE_USER()
         Call RemoveUserFromEngineSht(userName)
         Call RemoveUserFromReadMeSht(userName)
     Else
-        MsgBox ("User does not exist")
+        MsgBox "User does not exist", vbCritical
     End If
     
     Application.ScreenUpdating = True
@@ -57,7 +57,7 @@ Sub GENERATE_SCHEDULE()
         Call UpdateNextDateScheduled
         Call sourceSheet.Activate
     Else
-        MsgBox ("Schedule is impossible given the number of roles and available people")
+        MsgBox "Schedule is impossible given the number of roles and available people!", vbCritical
     End If
     
     Application.ScreenUpdating = True
@@ -110,5 +110,6 @@ Private Function CheckSolverProgram() As String
     
     If Err.Number <> 0 Then
         CheckSolverProgram = "Solver"
-    End If    
+    End If
 End Function
+

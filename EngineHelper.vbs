@@ -106,7 +106,7 @@ End Sub
 Function SolveSchedule(SolutionMethod As String)
     Application.Run "SolverReset"
     
-    'Ideally, we refactor this into separate methods but I want to avoid creating extra Subprocedures to retrieve the ranges for the 
+    'Ideally, we refactor this into separate methods but I want to avoid creating extra Subprocedures to retrieve the ranges for the
     'different constraints
     With Worksheets(ENGINE_NAME)
         'CONSTRAINT: align role counts
@@ -158,7 +158,7 @@ Function SolveSchedule(SolutionMethod As String)
                 
                 solverResult = Application.Run("SolverSolve", True)
                 SolveSchedule = ParseSolverReturnCodes(solverResult) And CheckPositiveObjective
-        End Select            
+        End Select
     End With
 End Function
 
@@ -177,13 +177,17 @@ End Sub
 
 Function ParseSolverReturnCodes(code)
     ParseSolverReturnCodes = False
+    If (IsError(code)) Then
+        MsgBox "It is possible that you have hit the limit on the model. To continue using the scheduler, either remove users/roles or follow instructions in the OPENSOLVER_INSTRUCTION spreadsheet to install OpenSolver.", vbCritical
+        'Trigger new spreadsheet with instructions!
+        Worksheets(OPENSOLVER_INSTRUCTIONS_NAME).Visible = True
+        'Immediately exit
+        Exit Function
+    End If
     Select Case code
     Case 0 To 2
         ParseSolverReturnCodes = True
     'Case 3 To 13 are False
-    Case 13
-        MsgBox ("It is possible that you have hit the limit on the model. To continue using the scheduler, either remove users/roles or follow instructions in the OPENSOLVER_INSTRUCTION spreadsheet to install OpenSolver.")
-        'TODO: trigger new spreadsheet with instructions!
     End Select
 End Function
 

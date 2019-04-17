@@ -1,58 +1,24 @@
+Function CheckSolverAddin() As Boolean
+    CheckSolverAddin = CheckAddin("Solver add-in") Or CheckAddin("OpenSolver")
+End Function
+
+Function CheckAddin(s As String) As Boolean
+    Dim x As Variant
+    On Error Resume Next
+    x = AddIns(s).Installed
+    On Error GoTo 0
+    If IsEmpty(x) Then
+        CheckAddin = False
+    Else
+        CheckAddin = True
+    End If
+End Function
+
 'https://stackoverflow.com/questions/12796973/function-to-convert-column-number-to-letter
 Function Col_Letter(lngCol As Long) As String
     Dim vArr
     vArr = Split(Cells(1, lngCol).Address(True, False), "$")
     Col_Letter = vArr(0)
-End Function
-
-'https://peltiertech.com/Excel/SolverVBA.html
-Function CheckSolver() As Boolean
-  '' Adjusted for Application.Run() to avoid Reference problems with Solver
-  '' Peltier Technical Services, Inc., Copyright © 2007. All rights reserved.
-  '' Returns True if Solver can be used, False if not.
-
-  Dim bSolverInstalled As Boolean
-
-  '' Assume true unless otherwise
-  CheckSolver = True
-
-  On Error Resume Next
-  ' check whether Solver is installed
-  bSolverInstalled = Application.AddIns("Solver Add-In").Installed
-  Err.Clear
-
-  If bSolverInstalled Then
-    ' uninstall temporarily
-    Application.AddIns("Solver Add-In").Installed = False
-    ' check whether Solver is installed (should be false)
-    bSolverInstalled = Application.AddIns("Solver Add-In").Installed
-  End If
-
-  If Not bSolverInstalled Then
-    ' (re)install Solver
-    Application.AddIns("Solver Add-In").Installed = True
-    ' check whether Solver is installed (should be true)
-    bSolverInstalled = Application.AddIns("Solver Add-In").Installed
-  End If
-
-  If Not bSolverInstalled Then
-    MsgBox "Solver not found. This workbook will not work.", vbCritical
-    CheckSolver = False
-  End If
-
-  If CheckSolver Then
-    ' initialize Solver
-    Application.Run "Solver.xlam!Solver.Solver2.Auto_open"
-  End If
-  On Error GoTo 0
-
-End Function
-
-Function InputWithExit(prompt As String, boxName As String)
-    Dim result As String
-    result = Trim(WorksheetFunction.Proper(InputBox(prompt, boxName)))
-    If result = "" Then End
-    InputWithExit = result
 End Function
 
 'Checks if range is empty

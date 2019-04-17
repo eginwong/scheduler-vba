@@ -104,7 +104,6 @@ Sub RemoveRoleFromEngineSht(roleName)
 End Sub
 
 Function SolveSchedule(SolutionMethod As String)
-    Application.Run "SolverReset"
     
     'Ideally, we refactor this into separate methods but I want to avoid creating extra Subprocedures to retrieve the ranges for the
     'different constraints
@@ -151,6 +150,7 @@ Function SolveSchedule(SolutionMethod As String)
                 SolveSchedule = ParseOpenSolverReturnCodes(solverResult) And CheckPositiveObjective
         
             Case "Solver"
+                Application.Run "SolverReset"
                 Application.Run "SolverAdd", expectedRoleConstraint, 2, actualRoleConstraint
                 Application.Run "SolverAdd", workingAreaConstraint, 5
                 Application.Run "SolverAdd", maxRolePerPersonConstraint, 1, 1
@@ -181,6 +181,7 @@ Function ParseSolverReturnCodes(code)
         MsgBox "It is possible that you have hit the limit on the model. To continue using the scheduler, either remove users/roles or follow instructions in the OPENSOLVER_INSTRUCTION spreadsheet to install OpenSolver.", vbCritical
         'Trigger new spreadsheet with instructions!
         Worksheets(OPENSOLVER_INSTRUCTIONS_NAME).Visible = True
+        Worksheets(OPENSOLVER_INSTRUCTIONS_NAME).Activate
         'Immediately exit
         Exit Function
     End If

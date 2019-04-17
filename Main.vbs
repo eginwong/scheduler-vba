@@ -39,6 +39,13 @@ Sub REMOVE_USER()
 End Sub
 
 Sub GENERATE_SCHEDULE()
+    If Not (CheckSolverAddin()) Then
+        MsgBox "Requisite dependencies, Solver or OpenSolver, are not installed. Please install those first.", vbCritical
+        Worksheets(SOLVER_INSTRUCTIONS_NAME).Visible = True
+        Worksheets(SOLVER_INSTRUCTIONS_NAME).Activate
+        Exit Sub
+    End If
+
     Application.ScreenUpdating = False
     Dim sourceSheet As Worksheet
     Set sourceSheet = ActiveSheet
@@ -112,4 +119,3 @@ Private Function CheckSolverProgram() As String
         CheckSolverProgram = "Solver"
     End If
 End Function
-

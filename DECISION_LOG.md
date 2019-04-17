@@ -1,5 +1,7 @@
 # Scheduler Design Log
 
+Incorrect startup logic causing file to be corrupted. Removed fancy auto-install logic and included regular instructions for Solver instead. 
+
 Bug: there is a limit of 200 decision variables using Microsoft Excel's Solver add-in. 
 - Two alternatives:
   - [Premium Solver](https://www.solver.com/premium-solver%C2%AE-platform), a paid for plug-in

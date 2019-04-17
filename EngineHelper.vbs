@@ -180,8 +180,7 @@ Function ParseSolverReturnCodes(code)
     If (IsError(code)) Then
         MsgBox "It is possible that you have hit the limit on the model. To continue using the scheduler, either remove users/roles or follow instructions in the OPENSOLVER_INSTRUCTION spreadsheet to install OpenSolver.", vbCritical
         'Trigger new spreadsheet with instructions!
-        Worksheets(OPENSOLVER_INSTRUCTIONS_NAME).Visible = True
-        Worksheets(OPENSOLVER_INSTRUCTIONS_NAME).Activate
+        DisplayOpenSolverInstructions
         'Immediately exit
         Exit Function
     End If

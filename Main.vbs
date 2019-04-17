@@ -41,8 +41,7 @@ End Sub
 Sub GENERATE_SCHEDULE()
     If Not (CheckSolverAddin()) Then
         MsgBox "Requisite dependencies, Solver or OpenSolver, are not installed. Please install those first.", vbCritical
-        Worksheets(SOLVER_INSTRUCTIONS_NAME).Visible = True
-        Worksheets(SOLVER_INSTRUCTIONS_NAME).Activate
+        DisplaySolverInstructions
         Exit Sub
     End If
 
@@ -107,15 +106,13 @@ Sub REMOVE_ROLE()
 End Sub
 
 Private Function CheckSolverProgram() As String
+    'Set default for solver program
+    CheckSolverProgram = "Solver"
     'VB ghetto way of doing try-catch block
     On Error Resume Next
     Err.Clear
     'Will throw an error if OpenSolver is not loaded as a plugin
     If AddIns("OpenSolver").Installed Then
         CheckSolverProgram = "OpenSolver"
-    End If
-    
-    If Err.Number <> 0 Then
-        CheckSolverProgram = "Solver"
     End If
 End Function

@@ -1,5 +1,21 @@
 Function CheckSolverAddin() As Boolean
-    CheckSolverAddin = CheckAddin("Solver add-in") Or CheckAddin("OpenSolver")
+
+    'If the product of roles and users are greater than the Solver limit (200)
+    'Check for open solver instead
+    Dim ExpectedDecisionVariables As Integer
+    ExpectedDecisionVariables = CountRoles() * CountUsers()
+    
+    If (ExpectedDecisionVariables > 199) Then
+        CheckSolverAddin = CheckAddin("OpenSolver")
+        If Not CheckSolverAddin Then
+            DisplayOpenSolverInstructions
+        End If
+    Else
+        CheckSolverAddin = CheckAddin("Solver add-in")
+        If Not CheckSolverAddin Then
+            DisplaySolverInstructions
+        End If
+    End If
 End Function
 
 Function CheckAddin(s As String) As Boolean
@@ -13,6 +29,16 @@ Function CheckAddin(s As String) As Boolean
         CheckAddin = True
     End If
 End Function
+
+Sub DisplayOpenSolverInstructions()
+    Worksheets(OPENSOLVER_INSTRUCTIONS_NAME).Visible = True
+    Worksheets(OPENSOLVER_INSTRUCTIONS_NAME).Activate
+End Sub
+
+Sub DisplaySolverInstructions()
+    Worksheets(SOLVER_INSTRUCTIONS_NAME).Visible = True
+    Worksheets(SOLVER_INSTRUCTIONS_NAME).Activate
+End Sub
 
 'https://stackoverflow.com/questions/12796973/function-to-convert-column-number-to-letter
 Function Col_Letter(lngCol As Long) As String
@@ -57,3 +83,4 @@ Sub InsertAndCopyColumn(worksheetName, range)
         .Columns(range - 1).Copy Destination:=.Columns(range)
     End With
 End Sub
+

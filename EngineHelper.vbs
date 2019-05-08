@@ -20,7 +20,7 @@ Sub AddUserToEngineSht(readmeNameCellRefString)
         For i = 1 To roleCount
             userCapabilityCol = Col_Letter(i + 1)
             .Cells(USER_ROW, i + 1).Formula = "=IF(AND(README!$G9=TRUE,CAPABILITIES!" & Col_Letter(i + 2) & (USER_ROW + 2) & "= 1), " _
-                & SCHEDULE_DATE_CELL & "-" & USERS_NAME & "!" & userCapabilityCol & "4, -100000000)"
+                & SCHEDULE_DATE_CELL & "-" & USERS_NAME & "!" & userCapabilityCol & "2, -100000000)"
         Next i
         .range(Col_Letter(3 + roleCount) & USER_ROW).Formula = readmeNameCellRefString
         

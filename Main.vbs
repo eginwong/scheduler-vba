@@ -112,7 +112,7 @@ Private Function CheckSolverProgram() As String
     On Error Resume Next
     Err.Clear
     'Will throw an error if OpenSolver is not loaded as a plugin
-    If AddIns("OpenSolver").Installed Then
+    If CheckAddin("OpenSolver") Then
         CheckSolverProgram = "OpenSolver"
     End If
 End Function

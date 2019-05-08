@@ -40,6 +40,13 @@ Sub DisplaySolverInstructions()
     Worksheets(SOLVER_INSTRUCTIONS_NAME).Activate
 End Sub
 
+Function InputWithExit(prompt As String, boxName As String)
+    Dim result As String
+    result = Trim(WorksheetFunction.Proper(InputBox(prompt, boxName)))
+    If result = "" Then End
+    InputWithExit = result
+End Function
+
 'https://stackoverflow.com/questions/12796973/function-to-convert-column-number-to-letter
 Function Col_Letter(lngCol As Long) As String
     Dim vArr
